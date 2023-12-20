@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 export default function App() {
   const [getInput, setGetInput] = useState('');
@@ -44,6 +44,21 @@ export default function App() {
       console.error('Error:', error);
     }
   };
+  const handleDoubleClick= () => {
+    try {
+      const sanitizedInput = getInput.replace(/([\+\-\*\.\/])+/g, '$1'); // Keep only the last operator
+      const calculatedResult = eval(sanitizedInput);
+      setSigns(calculatedResult)
+      if (!isNaN(calculatedResult)) {
+        setGetInput(calculatedResult.toFixed(1) );
+      } else {
+        setGetInput('Error');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
 
   const removeNumber = () => {
  setGetInput((preState) =>
@@ -117,7 +132,7 @@ export default function App() {
           />
         </Col>
         <Col className='border border-dark'>
-          <input type='submit' id='equals' value='=' onClick={handleEqual} />
+          <input type='submit' id='equals' value='=' onDoubleClick={handleDoubleClick} onClick={handleEqual} />
         </Col>
         <Col className='border border-dark'>
           <input
